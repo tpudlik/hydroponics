@@ -6,7 +6,7 @@ import time
 from config import LIGHTS_TIME_ON, LIGHTS_TIME_OFF
 from hydroponics import run_pump, lights_on, lights_off, cleanup
 
-schedule.every().hour(run_pump)
+schedule.every().hour.do(run_pump)
 schedule.every().day.at(LIGHTS_TIME_ON).do(lights_on)
 schedule.every().day.at(LIGHTS_TIME_OFF).do(lights_off)
 
