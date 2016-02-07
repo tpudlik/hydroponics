@@ -13,11 +13,10 @@ PUMP_DEFAULT_ON = False
 LIGHTS_DEFAULT_ON = True
 
 # How long should the pump run when engaged (in seconds)?
-PUMP_TIME = 300
+PUMP_TIME = 3
 
-# At what time should the lights turn on?  A string such as "6:00" (use 24h
-# clock).
-LIGHTS_TIME_ON = "6:00"
+# At what hour should the lights turn on?  An integer 0-23.
+LIGHTS_TIME_ON = 6
 
-# At what time should the lights turn off?
-LIGHTS_TIME_OFF = "23:00"
+# At what time should the lights turn off?  An integer 0-23.
+LIGHTS_TIME_OFF = 23
