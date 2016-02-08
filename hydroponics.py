@@ -143,12 +143,15 @@ class MockHydroponicsController(object):
 
 
 if __name__ == '__main__':
-    kwargs = {"pump_pin": 12,
-              "lights_pin": 18,
+    kwargs = {"pump_pin": 13,
+              "lights_pin": 11,
               "pump_default_on": False,
               "lights_default_on": True}
     
     with MockHydroponicsController(**kwargs) as h:
         print "Hit Ctrl + C to interrupt process."
         while True:
-            time.sleep(1)
+            h.lights_on()
+            time.sleep(5)
+            h.lights_off
+            time.sleep(5)
