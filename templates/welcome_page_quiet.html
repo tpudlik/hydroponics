@@ -1,0 +1,17 @@
+{% extends "main_page.html" %}
+{% block body %}
+
+<p>
+    The system is currently paused.  The lights and pump will not resume
+    regular operation until {{ resume.strftime("%I:%M %p") }} on
+    {{ resume.strftime("%A, %B %d") }}.
+</p>
+<p>
+    You can unpause the system right now by hitting the button below.
+</p>
+
+<form action="{{ url_for('unpause_page') }}" method="POST" id="SUBMIT">
+    <button type="submit" id="submit_button">UNPAUSE</button>
+</form>
+
+{% endblock %}

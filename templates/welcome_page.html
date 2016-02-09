@@ -1,0 +1,29 @@
+{% extends "main_page.html" %}
+{% block body %}    
+<p>
+    The system is operating normally.  You can pause it (turn off the lights
+    and pump) using the dialog below.
+</p>
+
+<form action="{{ url_for('pause_page') }}" method="POST" id="submit">
+<table>
+    <tr>
+        <td class="label"> Pause for </td>
+        <td>
+            <input type="number"
+                   name="duration"
+                    min="0"
+                   step="1"
+                  value="30"
+               tabindex=2 >
+        </td>
+        <td>
+            minutes
+        </td>
+        <td>
+            <button type="submit" id="submit_button">PAUSE</button>
+        </td>
+    </tr>
+</table>
+</form>
+{% endblock %}

@@ -148,10 +148,10 @@ if __name__ == '__main__':
               "pump_default_on": False,
               "lights_default_on": True}
     
-    with MockHydroponicsController(**kwargs) as h:
+    with HydroponicsController(**kwargs) as h:
         print "Hit Ctrl + C to interrupt process."
         while True:
             h.lights_on()
             time.sleep(5)
-            h.lights_off
+            h.lights_off()
             time.sleep(5)
