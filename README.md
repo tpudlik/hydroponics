@@ -1,7 +1,7 @@
 # Simple hydroponics system #
 
-A Raspberry-Pi based controller for a hydroponics system, turning the lights on
-and off at set times of day and running the pump every hour.
+A Raspberry-Pi based controller for a hydroponics system, turning the lights
+on and off at set times of day and running the pump every hour.
 
 
 ## Hardware ##
@@ -24,6 +24,7 @@ and off at set times of day and running the pump every hour.
 1.  Assemble the IKEA cabinet.
 2.  Cut seven 2.75" holes in each container lid.  This is most easily done
     using a hole saw.
+3.  [More steps needed!]
 
 
 ## Software ##
@@ -43,8 +44,8 @@ There are two versions of the software.
 The basic version depends only on `apscheduler`, the Advanced Python
 Scheduler.
 
-The web app version requires the `apscheduler` and
-[Flask](http://flask.pocoo.org/).
+The web app version requires the `apscheduler`,
+[Flask](http://flask.pocoo.org/), and `rpyc`.
 
 
 ### Installation ###
@@ -55,7 +56,8 @@ Python or some virtualenv).
 
 1.  Install Flask via `sudo pip install Flask`.
 2.  Install the Advanced Python Scheduler via `sudo pip install apscheduler`.
-3.  Clone this repository.
+3.  Install RPyC via `sudo pip install rpyc`.
+4.  Clone this repository.
 
 
 ### Usage ###
@@ -63,6 +65,7 @@ Python or some virtualenv).
 After setting the values in `config.py`, run either,
 
 1.  `sudo python main.py &` for the basic version, or,
-2.  `sudo python webapp.py &` for the web app version.
+2.  `sudo python hydroponics_server.py &`, followed by
+    `sudo python webapp.py &`, for the web app version.
 
-Don't forget to do `disown -h %1` to keep the job running after you log off.
+Don't forget to do `disown` to keep the job(s) running after you log off.
