@@ -78,7 +78,7 @@ if __name__ == '__main__':
               "pump_default_on": PUMP_DEFAULT_ON,
               "lights_default_on": LIGHTS_DEFAULT_ON}
     
-    with MockHydroponicsController(**kwargs) as h:
+    with HydroponicsController(**kwargs) as h:
         scheduler.add_job(h.run_pump, 'interval', hours=1, args=(PUMP_TIME,),
                           id="pump")
         scheduler.add_job(h.lights_on,  'cron', hour=LIGHTS_TIME_ON,
