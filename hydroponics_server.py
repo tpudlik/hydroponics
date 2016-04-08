@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-""" Hydroponics controller that runs a RPyC server and can thus be controlled
+""" Hydroponics server that runs as a RPyC service and can thus be controlled
 by another process, such as the web application.
 
 You should start the server (by running this script) before starting the
@@ -11,9 +11,11 @@ only one instance of the HydroponicsController running at the same time,
 but the web server creates a new thread for every connection.
 
 """
-
 import datetime
+import logging
+logging.basicConfig()
 
+from apscheduler.jobstores.base import JobLookupError
 from apscheduler.schedulers.background import BackgroundScheduler
 import rpyc
 from rpyc.utils.server import ThreadedServer
