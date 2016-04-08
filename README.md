@@ -14,8 +14,8 @@ on and off at set times of day and running the pump every hour.
 2.  A pump for aerating the water.
 3.  Lamps for illuminating the plants.  We used a 5 meter Toogod red:blue 4:1
     LED roll, with 2.5 meters of LEDs (about 30 W) per container.
-4.  IKEA **** cabinet, to serve as frame, with matching containers with lids
-    to hold the plants.
+4.  IKEA TROFAST cabinet, to serve as frame, with matching containers with
+    lids to hold the plants.
 5.  Baskets for the plants [what kind did we use?]
 6.  Clay pellets.
 

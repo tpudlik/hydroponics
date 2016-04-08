@@ -31,7 +31,12 @@ The class constructor takes five keyword arguments, all required:
 """
 
 import time
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    pass
+    # TODO: This is for testing on machines other than the Pi, but should be
+    #       handled more gracefully.
 
 
 class HydroponicsController(object):

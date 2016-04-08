@@ -22,16 +22,17 @@ app.secret_key = "SJDFAIVCMAIOEJEOGKATBKPFK"
 
 @app.route('/')
 def welcome_page():
-    # TO DO: Allow extending the current pause without unpausing
+    # TODO: Allow extending the current pause without unpausing
     c = rpyc.connect("localhost", PORT)
     if c.root.is_paused():
         return render_template("welcome_page_quiet.html",
-                               resume=c.root.get_resumption_time())
+                               resume=c.root.get_resume_time())
     else:
         return render_template("welcome_page.html")
 
 @app.route('/pause', methods=['POST'])
 def pause_page():
+    # TODO: Perform some type of validation of pause_duration?
     pause_duration = request.form["duration"]
     c = rpyc.connect("localhost", PORT)
     c.root.pause(pause_duration)

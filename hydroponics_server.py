@@ -14,29 +14,29 @@ but the web server creates a new thread for every connection.
 
 import datetime
 
-import rpyc
 from apscheduler.schedulers.background import BackgroundScheduler
+import rpyc
+from rpyc.utils.server import ThreadedServer
 
 from hydroponics import HydroponicsController, MockHydroponicsController
 from config import (PUMP_PIN, LIGHTS_PIN, PUMP_DEFAULT_ON, LIGHTS_DEFAULT_ON,
                     PUMP_TIME, LIGHTS_TIME_ON, LIGHTS_TIME_OFF, PORT)
 
 
-class CustomizedHydroponicsService(hydroponics_controller, scheduler):
+def CustomizedHydroponicsService(hydroponics_controller, scheduler):
+    state = {"paused": False, "resume_time": None}
+
     class HydroponicsService(rpyc.Service):
-        self.paused = False
-        self.resume_time = None
-
         def exposed_is_paused(self):
-            return self.paused
+            return state["paused"]
 
-        def exposed_get_resumption_time(self):
-            return self.resume_time
+        def exposed_get_resume_time(self):
+            return state["resume_time"]
 
         def exposed_resume(self):
             """Resume regular operation of the hydroponics system."""
 
-            self.paused = False
+            state["paused"] = False
             try:
                 scheduler.remove_job("resume")
             except JobLookupError:
@@ -46,27 +46,26 @@ class CustomizedHydroponicsService(hydroponics_controller, scheduler):
                 scheduler.resume_job(job)
 
             current_hour = datetime.datetime.now().time()
-            time_on = datetime.time(LIGHTS_TIME_ON,0)
-            time_off = datetime.time(LIGHTS_TIME_OFF,0)
+            time_on = datetime.time(LIGHTS_TIME_ON, 0)
+            time_off = datetime.time(LIGHTS_TIME_OFF, 0)
             if current_hour > time_on and current_hour < time_off:
-                h.lights_on()
+                hydroponics_controller.lights_on()
 
         def exposed_pause(self, duration):
-            """Pause the hydroponics system for duration."""
+            """Pause the hydroponics system for duration seconds."""
 
-            self.paused = True
-            self.resume_time = self.get_resumption_time(duration)
-            h.lights_off()
-            h.pump_off()
+            state["paused"] = True
+            state["resume_time"] = self.get_resumption_time(duration)
+            hydroponics_controller.lights_off()
+            hydroponics_controller.pump_off()
 
             for job in ["pump", "lights on", "lights off"]:
                 scheduler.pause_job(job)
 
             scheduler.add_job(self.exposed_resume, 'date',
-                              run_date=self.resume_time, id="resume")
+                              run_date=state["resume_time"], id="resume")
 
         def get_resumption_time(self, pause_duration):
-            # TO DO: Perform some type of validation of pause_duration?
             pause_datetime = datetime.timedelta(minutes=int(pause_duration))
             return datetime.datetime.now() + pause_datetime
     
@@ -80,8 +79,6 @@ if __name__ == '__main__':
               "lights_default_on": LIGHTS_DEFAULT_ON}
     
     with MockHydroponicsController(**kwargs) as h:
-        # TODO: I should name jobid's here, so that I can pause and resume
-        # them later as needed.
         scheduler.add_job(h.run_pump, 'interval', hours=1, args=(PUMP_TIME,),
                           id="pump")
         scheduler.add_job(h.lights_on,  'cron', hour=LIGHTS_TIME_ON,
@@ -91,7 +88,8 @@ if __name__ == '__main__':
         scheduler.start()
 
         cs = CustomizedHydroponicsService(h, scheduler)
-        t = rpyc.ThreadedServer(cs, port=PORT)
+        t = ThreadedServer(cs, port=PORT,
+                           protocol_config={"allow_public_attrs": True})
 
         try:
             t.start()
